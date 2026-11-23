@@ -1,9 +1,7 @@
 # PS-Joint
 
-Runnable MMSegmentation project for the final retinal PS-Joint variant. It
-contains the MMSegmentation framework and the PS-Joint implementation, but no
-baseline experiments, ablation variants, checkpoints, generated results, or
-private datasets. The original research workspace is not modified.
+This repository is the official implementation of paper: PS-Joint: Partially Supervised Learning with Uncertainty for Joint
+Medical Image Segmentation and Disease Classification.
 
 ## Project layout
 
@@ -11,20 +9,6 @@ private datasets. The original research workspace is not modified.
 - `configs/ps_joint/ps_joint_retinal.py`: one fully resolved PS-Joint config.
 - `tools/`: training, testing, and distributed launch entry points.
 - `scripts/`: short local and Slurm launchers.
-
-The project does not require an overlay installation step. The configuration
-is flat and has no `_base_` inheritance.
-
-## Paper-to-code naming
-
-The method is named **PS-Joint** in the paper. Its Python registry class is
-`PSJoint` because Python identifiers cannot contain a hyphen:
-
-```text
-PS-Joint
-├── segmentor: PSJoint                  (models/segmentors/ps_joint.py)
-└── decoder:   PSJointDecodeHead        (models/decode_heads/ps_joint_decode_head.py)
-```
 
 ## Install
 
@@ -71,22 +55,3 @@ bash scripts/train.sh
 bash scripts/test.sh work_dirs/ps_joint_retinal/iter_15000.pth \
   --test_dataset dataset_DDR_test --test_dataset_ty retinal
 ```
-
-For LUMI, edit `YOUR_PROJECT` in `scripts/slurm_train.sh`, export the paths above,
-and submit the script with `sbatch`.
-
-The release definition can be checked without constructing the full model:
-
-```bash
-python scripts/verify_release.py
-```
-
-## Final method represented here
-
-- Swin-T spatial-prior expert and DINOv3-S adapter expert.
-- Prompt-tuned CLIP disease queries.
-- Direct key reparameterization with Gaussian noise clipped to ±2.35.
-- Lightweight 8× patch embedding for probabilistic query interaction.
-- Query-variance Mahalanobis maps computed in FP32 with variance floor `1e-4`.
-- Patch-space Mahalanobis fusion and dual-expert pseudo-label selection.
-- Deterministic mean evaluation (`eval_strategy='mean'`).
